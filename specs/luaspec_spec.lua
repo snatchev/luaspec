@@ -6,5 +6,11 @@ describe["default matchers"] = function()
 			expect(type(m)).should_be("function")
 		end
 	end
+
+  describe["should_be"] = function()
+    it["should match table equality"] = function()
+      expect({"test"}).should_equal({"test"})
+    end
+  end
 end
 

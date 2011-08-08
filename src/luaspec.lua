@@ -130,6 +130,26 @@ matchers = {
 		return true
 	end;
 	
+  -- tests equality, not reference
+  should_equal = function(value, expected)
+    if(type(value) == "table" and type(expected) == "table") then
+      table_equality = {
+        __eq = function(self, other)
+          for key, value in pairs(self) do
+            if(value ~= other[key]) then
+              return(false)
+            end
+          end
+          return(true)
+        end
+      }
+
+      setmetatable(value, table_equality)
+      setmetatable(expected, table_equality)
+    end
+    return matchers.should_be(value, expected)
+  end;
+
 	should_error = function(f)
 		if pcall(f) then
 			return false, "expecting an error but received none"
@@ -148,8 +168,6 @@ matchers = {
 		return true
 	end;  
 }
- 
-matchers.should_equal = matchers.should_be
 
 --
 
